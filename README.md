@@ -1,4 +1,4 @@
-# swagger-java-client
+# NiFi 1.19.1 버전을 위한 Java API Client
 
 
 ## Swagger Codegen
@@ -18,17 +18,6 @@
 
 ```shell
 mvn install
-```
-
-### Maven Dependency
-
-```xml
-<dependency>
-    <groupId>io.swagger</groupId>
-    <artifactId>swagger-java-client</artifactId>
-    <version>1.0.0</version>
-    <scope>compile</scope>
-</dependency>
 ```
 
 ## API 호출
