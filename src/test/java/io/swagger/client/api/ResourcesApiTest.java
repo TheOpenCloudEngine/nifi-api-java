@@ -27,16 +27,16 @@ package io.swagger.client.api;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
-import io.swagger.client.auth.OAuth;
-import io.swagger.client.model.ResourcesEntity;
+import io.swagger.client.model.*;
 import org.junit.Test;
 
-import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * API tests for ResourcesApi
  */
-public class ResourcesApiTest {
+public class ResourcesApiTest extends TestFixture {
 
     private final ResourcesApi api = new ResourcesApi();
 
@@ -48,30 +48,44 @@ public class ResourcesApiTest {
      */
     @Test
     public void getResourcesTest() throws ApiException {
-        ApiClient client = new ApiClient(true);
-        client.setDebugging(true);
-        client.setBasePath("https://localhost:8443/nifi-api");
-        client.addDefaultHeader("Authorization", String.format("Bearer %s", accessToken()));
+        ApiClient client = apiClient();
         api.setApiClient(client);
 
+        /////////////////////
+
         ResourcesEntity response = api.getResources();
-        System.out.println(response.getResources());
+        List<ResourceDTO> resources = response.getResources();
+        resources.forEach(resource -> {
+            if (resource.getIdentifier().startsWith("/process-groups/")) {
+                String processGroupId = resource.getIdentifier().replaceAll("/process-groups/", "");
+                System.out.println(processGroupId);
+            }
+        });
+
+        /////////////////////
+
+        ProcessgroupsApi pgApi = new ProcessgroupsApi();
+        pgApi.setApiClient(client);
+
+        String id = UUID.randomUUID().toString();
+
+        ProcessGroupDTO component = new ProcessGroupDTO();
+        component.setName("테스트 그룹");
+
+        PositionDTO position = new PositionDTO();
+        position.setX(300d);
+        position.setY(-300d);
+        component.setPosition(position);
+
+        RevisionDTO revision = new RevisionDTO();
+        revision.setVersion(0L);
+        revision.setClientId(id);
+
+        ProcessGroupEntity pgEntity = new ProcessGroupEntity();
+        pgEntity.revision(revision);
+        pgEntity.component(component);
+        pgEntity.disconnectedNodeAcknowledged(false);
+
+        pgApi.createProcessGroup(id, pgEntity);
     }
-
-    private static final String getBasicAuthenticationHeader(String username, String password) {
-        String valueToEncode = username + ":" + password;
-        return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
-    }
-
-    private static String accessToken() throws ApiException {
-        AccessApi accessApi = new AccessApi();
-        ApiClient client = new ApiClient(true);
-        client.setDebugging(true);
-        client.addDefaultHeader("Authorization", getBasicAuthenticationHeader("admin", "adminadminadmin"));
-        client.setBasePath("https://localhost:8443/nifi-api");
-
-        accessApi.setApiClient(client);
-        return accessApi.createAccessToken("admin", "adminadminadmin");
-    }
-
 }

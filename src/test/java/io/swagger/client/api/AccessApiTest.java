@@ -32,7 +32,7 @@ import org.junit.Test;
 /**
  * API tests for AccessApi
  */
-public class AccessApiTest {
+public class AccessApiTest extends TestFixture {
 
     private final AccessApi api = new AccessApi();
 
@@ -46,8 +46,7 @@ public class AccessApiTest {
      */
     @Test
     public void createAccessTokenTest() throws ApiException {
-        ApiClient client = new ApiClient(true);
-        client.setBasePath("https://localhost:8443/nifi-api");
+        ApiClient client = apiClient();
         api.setApiClient(client);
 
         String username = "admin";
