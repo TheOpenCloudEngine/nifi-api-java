@@ -31,10 +31,11 @@ mvn install
 </dependency>
 ```
 
-## Getting Started
+## API 호출
+
+API 호출을 위해서 Basic Auth로 Access Token을 얻습니다.
 
 ```java
-
 import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -46,23 +47,47 @@ import java.util.*;
 public class AccessApiExample {
 
     public static void main(String[] args) {
-        
-        AccessApi apiInstance = new AccessApi();
-        String username = "username_example"; // String | 
-        String password = "password_example"; // String | 
-        try {
-            String result = apiInstance.createAccessToken(username, password);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccessApi#createAccessToken");
-            e.printStackTrace();
-        }
+        AccessApi accessApi = new AccessApi();
+        ApiClient client = new ApiClient(true);
+        client.setDebugging(true);
+        client.addDefaultHeader("Authorization", getBasicAuthenticationHeader("admin", "adminadminadmin"));
+        client.setBasePath("https://localhost:8443/nifi-api");
+
+        accessApi.setApiClient(client);
+        String accessToken = accessApi.createAccessToken("admin", "adminadminadmin");
     }
 }
 
 ```
 
-## Documentation for API Endpoints
+Access Token을 이용하여 API를 호출합니다.
+
+```java
+import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AccessApi;
+
+import java.io.File;
+import java.util.*;
+
+public class ResourcesApiExample {
+
+    public static void main(String[] args) {
+        ResourcesApi api = new ResourcesApi();
+
+        ApiClient client = new ApiClient(true);
+        client.setDebugging(true);
+        client.setBasePath("https://localhost:8443/nifi-api");
+        client.addDefaultHeader("Authorization", String.format("Bearer %s", accessToken));
+        api.setApiClient(client);
+
+        ResourcesEntity response = api.getResources();
+    }
+}
+```
+
+## API Endpoints
 
 All URIs are relative to *http://localhost/nifi-api*
 
