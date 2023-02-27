@@ -1,15 +1,17 @@
 # NiFi Java API Client
 
-본 프로젝트는  1.19.1 버전을 위해서 개발이 된것으로 타 버전도 동일한 절차에 따라서 진행하면 된다.
+본 프로젝트는  1.19.1 버전을 위해서 개발이 된것으로 타 버전도 동일한 절차에 따라서 진행하도록 합니다.
 
 ## Overview
 
-* NiFi 소스코드를 다운로드하여 swagger.json 파일을 확인
-* Swagger Codegen으로 swagger.json 파일을 로딩하여 Java로 변환
-* 변환된 코드에서 NiFi 상위버전 부터 SSL 필수이므로 SSL 인증서 처리 및 OAuth 인증 처리 부분 수정
-  * OkHTTP를 사용하므로 SSL을 무시하도록 하고 Basic Auth, OAuth2를 추가하도록 함 
+* NiFi 소스코드를 다운로드하여 swagger.json 파일의 위치를 확인합니다.
+* Swagger Codegen으로 swagger.json 파일을 로딩하여 Java로 변환합니다.
+* 변환된 코드에서 NiFi 상위버전 부터 SSL 필수이므로 SSL 인증서 처리 및 OAuth 인증 처리 부분을 수정합니다.
+  * OkHTTP를 사용하므로 SSL을 무시하도록 하고 Basic Auth, OAuth2를 추가하도록 합니다.
 
 ## Swagger Codegen
+
+Swagger Codegen을 이용하여 Client API를 생성합니다.
 
 ```
 # cd nifi-1.19.1
@@ -23,6 +25,8 @@
 * Apache Maven
 
 ## Installation
+
+Maven Install을 통해서 JAR 파일을 다음과 같이 생성합니다.
 
 ```shell
 mvn install
